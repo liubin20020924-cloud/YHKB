@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edge_fixes.css') }}">
+
+<!-- 添加Polyfill支持 -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,es7,es2015,es2016,es2017,es2018,es2019,es2020,Array.prototype.includes,String.prototype.includes,NodeList.prototype.forEach,Object.entries,Object.values"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云户知识库 - 登录</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .login-header {
+            background: linear-gradient(to right, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .login-body {
+            padding: 30px;
+        }
+        .form-control:focus {
+            border-color: #4ca1af;
+            box-shadow: 0 0 0 0.25rem rgba(76, 161, 175, 0.25);
+        }
+        .btn-login {
+            background: linear-gradient(to right, #3498db 0%, #2980b9 100%);
+            border: none;
+            color: white;
+            padding: 12px;
+            font-weight: 600;
+        }
+        .btn-login:hover {
+            background: linear-gradient(to right, #2980b9 0%, #21618c 100%);
+            color: white;
+        }
+        .login-logo {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-right: none;
+        }
+        .form-control {
+            border-left: none;
+        }
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-home a {
+            color: #6c757d;
+            text-decoration: none;
+        }
+        .back-home a:hover {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- 头部 -->
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>云户知识库管理系统</h3>
+                <p class="mb-0">管理后台登录</p>
+            </div>
+            
+            <!-- 登录表单 -->
+            <div class="login-body">
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endif %}
+                
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+                    
+                    <!-- 用户名 -->
+                    <div class="mb-3">
+                        <label class="form-label">用户名</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="username" 
+                                   placeholder="请输入用户名"
+                                   value="{{ username if username else '' }}"
+                                   required
+                                   autofocus>
+                        </div>
+                    </div>
+                    
+                    <!-- 密码 -->
+                    <div class="mb-4">
+                        <label class="form-label">密码</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" 
+                                   class="form-control" 
+                                   name="password" 
+                                   placeholder="请输入密码"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- 提交按钮 -->
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-login btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>登录
+                        </button>
+                    </div>
+                    
+                    <!-- 登录提示 -->
+                    <div class="text-center text-muted mb-4">
+                        <small>
+                            <i class="fas fa-info-circle me-1"></i>
+                            <br>首次登录后请修改密码
+                        </small>
+                    </div>
+                </form>
+                
+                <!-- 返回首页 -->
+                <div class="back-home">
+                    <a href="{{ url_for('views.index') }}">
+                        <i class="fas fa-home me-1"></i>返回知识库首页
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 系统信息 -->
+        <div class="text-center text-white mt-4">
+            <small>
+                <i class="fas fa-copyright me-1"></i>云户知识库管理系统 {{ now().year if now else '2024' }}
+            </small>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 自动聚焦到用户名输入框
+            const usernameInput = document.querySelector('input[name="username"]');
+            if (usernameInput && !usernameInput.value) {
+                usernameInput.focus();
+            }
+            
+            // 监听回车键提交
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const form = document.querySelector('form');
+                    if (form) {
+                        form.submit();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

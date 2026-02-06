@@ -1,0 +1,66 @@
+/* 调试信息样式 */
+.debug-json {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.json-key {
+    color: #0d6efd;
+}
+
+.json-string {
+    color: #198754;
+}
+
+.json-number {
+    color: #fd7e14;
+}
+
+.json-boolean {
+    color: #d63384;
+}
+
+.json-null {
+    color: #6c757d;
+}
+
+.debug-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+
+.debug-section-title {
+    font-weight: bold;
+    color: #0d6efd;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.health-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.health-good {
+    background-color: #28a745;
+}
+
+.health-warning {
+    background-color: #ffc107;
+}
+
+.health-error {
+    background-color: #dc3545;
+}
