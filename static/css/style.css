@@ -1,0 +1,1238 @@
+/* ========================================
+   云户知识库管理系统 - 统一样式表
+   响应式设计 + Logo配色方案
+   ======================================== */
+
+/* ========================================
+   CSS 变量定义 - 基于 Logo 配色
+   ======================================== */
+:root {
+    /* 主色调 - 亮蓝色系 */
+    --primary-dark: #0f4c81;
+    --primary: #1a5c9e;
+    --primary-light: #2563eb;
+    --primary-lighter: #3b82f6;
+
+    /* 辅助色 - 浅蓝色 */
+    --secondary-dark: #4a5568;
+    --secondary: #718096;
+    --secondary-light: #a0aec0;
+
+    /* 功能色 */
+    --success: #48bb78;
+    --success-light: #9ae6b4;
+    --warning: #ed8936;
+    --danger: #f56565;
+    --info: #4299e1;
+
+    /* 中性色 */
+    --gray-50: #f7fafc;
+    --gray-100: #edf2f7;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e0;
+    --gray-400: #a0aec0;
+    --gray-500: #718096;
+    --gray-600: #4a5568;
+    --gray-700: #2d3748;
+    --gray-800: #1a202c;
+    --gray-900: #171923;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* 圆角 */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+
+    /* 过渡 */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   全局样式 & 响应式
+   ======================================== */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+    color: var(--gray-700);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    max-width: 1600px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
+/* Logo 图片样式 */
+.logo-img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.logo-img-large {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   头部样式 - Logo 配色
+   ======================================== */
+.header {
+    background: linear-gradient(135deg, #0f4c81 0%, #1a5c9e 40%, #2563eb 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: var(--radius-xl);
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    opacity: 1;
+}
+
+.header h1 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.header .lead {
+    opacity: 0.95;
+    font-size: clamp(0.9rem, 2vw, 1.25rem);
+}
+
+/* Logo 容器 */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-container .logo-text {
+    flex: 1;
+    padding-right: 0;
+}
+
+/* ========================================
+   搜索框样式
+   ======================================== */
+.search-box {
+    background: white;
+    padding: 25px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 1px solid var(--gray-200);
+}
+
+/* ========================================
+   卡片样式
+   ======================================== */
+.record-card, .management-card {
+    background: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    margin-bottom: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.record-card:hover, .management-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-header {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-lighter) 100%);
+    color: white;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    padding: 18px 20px;
+    font-weight: 600;
+}
+
+/* ========================================
+   按钮样式
+   ======================================== */
+.btn {
+    transition: var(--transition);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-lighter) 100%);
+    border-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white;
+}
+
+.link-btn {
+    background: linear-gradient(to right, var(--success) 0%, var(--success-light) 100%);
+    color: white;
+    border: none;
+}
+
+.link-btn:hover {
+    background: linear-gradient(to right, #38a169 0%, var(--success) 100%);
+    color: white;
+}
+
+.btn-login {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-lighter) 100%);
+    border: none;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.btn-login:hover {
+    background: linear-gradient(to right, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-lighter);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+/* ========================================
+   结果区域样式
+   ======================================== */
+.no-results, .no-records {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-500);
+}
+
+.no-results i, .no-records i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-group-view .btn {
+    border-radius: var(--radius-sm) !important;
+    margin: 0 2px;
+}
+
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ========================================
+   统计卡片样式
+   ======================================== */
+.statistics {
+    background: white;
+    padding: 25px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-md);
+}
+
+.statistics h3 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stats-card {
+    border-radius: var(--radius-lg);
+    color: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.stats-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stats-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.stats-card h5 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.bg-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-lighter) 100%); }
+.bg-success { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
+.bg-warning { background: linear-gradient(135deg, var(--warning) 0%, #f6ad55 100%); }
+.bg-danger { background: linear-gradient(135deg, var(--danger) 0%, #fc8181 100%); }
+.bg-info { background: linear-gradient(135deg, var(--info) 0%, #63b3ed 100%); }
+.bg-secondary { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
+
+/* ========================================
+   搜索选项卡样式
+   ======================================== */
+.search-tabs {
+    margin-bottom: 25px;
+}
+
+.search-tabs .nav-tabs {
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.search-tabs .nav-link {
+    color: var(--gray-600);
+    font-weight: 500;
+    padding: 12px 20px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.search-tabs .nav-link:hover {
+    color: var(--primary);
+    border-color: transparent;
+}
+
+.search-tabs .nav-link.active {
+    color: var(--primary);
+    background: transparent;
+    border-bottom-color: var(--primary);
+}
+
+.tab-content {
+    padding: 20px 0;
+}
+
+/* ========================================
+   链接和位置样式
+   ======================================== */
+.mgmt-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.user-info {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.user-info:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   内容查看相关样式
+   ======================================== */
+.trilium-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 25px;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    margin-top: 15px;
+    border: 1px solid var(--gray-200);
+}
+
+.trilium-content img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: var(--radius-md) !important;
+    margin: 15px 0 !important;
+    box-shadow: var(--shadow-md) !important;
+    display: block !important;
+}
+
+.trilium-content img.trilium-image {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+.trilium-content img.trilium-image:hover {
+    box-shadow: var(--shadow-xl) !important;
+    transition: var(--transition) !important;
+}
+
+/* 代码块样式 */
+.trilium-content pre {
+    background-color: var(--gray-800) !important;
+    color: #f8f8f2 !important;
+    padding: 20px !important;
+    border-radius: var(--radius-lg) !important;
+    overflow-x: auto !important;
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin: 20px 0 !important;
+    border-left: 4px solid var(--primary-lighter) !important;
+}
+
+.trilium-content code {
+    background-color: var(--gray-100) !important;
+    color: var(--primary) !important;
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    font-size: 0.9em !important;
+}
+
+.trilium-content pre code {
+    background-color: transparent !important;
+    color: inherit !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+}
+
+/* 表格样式 */
+.trilium-content table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+    border: 1px solid var(--gray-200) !important;
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden;
+}
+
+.trilium-content th, .trilium-content td {
+    border: 1px solid var(--gray-200) !important;
+    padding: 14px !important;
+}
+
+.trilium-content th {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-lighter) 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.trilium-content tbody tr:hover {
+    background-color: var(--gray-50) !important;
+}
+
+/* 引用块样式 */
+.trilium-content blockquote {
+    border-left: 4px solid var(--primary-lighter) !important;
+    padding: 15px 25px !important;
+    margin: 20px 0 !important;
+    background-color: var(--gray-50) !important;
+    color: var(--gray-600) !important;
+    font-style: italic !important;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* 标题样式 */
+.trilium-content h1, .trilium-content h2, .trilium-content h3 {
+    margin-top: 25px !important;
+    margin-bottom: 15px !important;
+    color: var(--gray-800) !important;
+    font-weight: 700;
+}
+
+.trilium-content h1 {
+    border-bottom: 3px solid var(--primary) !important;
+    padding-bottom: 12px !important;
+    font-size: 2em;
+}
+
+.trilium-content h2 {
+    border-bottom: 2px solid var(--primary-lighter) !important;
+    padding-bottom: 8px !important;
+    font-size: 1.5em;
+}
+
+/* 列表样式 */
+.trilium-content ul, .trilium-content ol {
+    padding-left: 25px !important;
+    margin: 15px 0 !important;
+}
+
+.trilium-content li {
+    margin: 8px 0 !important;
+}
+
+/* ========================================
+   加载和错误样式
+   ======================================== */
+.content-loading {
+    text-align: center;
+    padding: 50px;
+}
+
+.content-error {
+    color: var(--danger);
+    padding: 15px;
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: var(--radius-lg);
+    margin: 15px 0;
+}
+
+.content-info {
+    background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+    padding: 15px;
+    border-radius: var(--radius-lg);
+    margin: 15px 0;
+    font-size: 0.95em;
+    border: 1px solid #81e6d9;
+}
+
+.view-content-btn {
+    background: linear-gradient(to right, var(--info) 0%, #60a5fa 100%);
+    color: white;
+    border: none;
+}
+
+.view-content-btn:hover {
+    background: linear-gradient(to right, #2563eb 0%, var(--info) 100%);
+    color: white;
+}
+
+/* ========================================
+   连接状态样式
+   ======================================== */
+.connection-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    padding: 6px 12px;
+    background: var(--gray-100);
+    border-radius: 20px;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-connected {
+    background-color: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulse 2s infinite;
+}
+
+.status-disconnected {
+    background-color: var(--danger);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ========================================
+   内容搜索相关样式
+   ======================================== */
+.search-highlight {
+    background-color: #fefcbf;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.note-result-card {
+    margin-bottom: 15px;
+    border-left: 4px solid var(--primary) !important;
+    transition: var(--transition);
+}
+
+.note-result-card:hover {
+    border-left-color: var(--primary-lighter) !important;
+    box-shadow: var(--shadow-md);
+}
+
+.note-snippet {
+    color: var(--gray-500);
+    font-size: 0.9em;
+    margin: 8px 0;
+}
+
+.content-search-results {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    background-color: var(--gray-50);
+}
+
+.search-meta {
+    font-size: 0.85em;
+    color: var(--gray-500);
+}
+
+.search-result-header {
+    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 15px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ========================================
+   模态框样式
+   ======================================== */
+.modal-header {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modal-content {
+    border: none;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 15px 25px;
+}
+
+.toast-container {
+    z-index: 9999;
+}
+
+/* ========================================
+   登录页面样式
+   ======================================== */
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.login-header {
+    background: linear-gradient(135deg, #0f4c81 0%, #1a5c9e 50%, #2563eb 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.login-body {
+    padding: 40px;
+}
+
+.login-logo {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.alert {
+    border-radius: var(--radius-lg);
+    border: none;
+    padding: 15px 20px;
+}
+
+.input-group-text {
+    background-color: var(--gray-100);
+    border-color: var(--gray-300);
+}
+
+.form-control {
+    border-color: var(--gray-300);
+}
+
+.back-home {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.back-home a {
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.back-home a:hover {
+    color: var(--primary);
+}
+
+/* ========================================
+   用户管理页面样式
+   ======================================== */
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-lighter) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+}
+
+.status-badge {
+    font-size: 0.8em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.status-active {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.status-inactive {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+
+.status-locked {
+    background-color: #fefcbf;
+    color: #744210;
+}
+
+.role-admin {
+    background-color: #bee3f8;
+    color: #2a4365;
+}
+
+.role-user {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.log-card {
+    border-left: 4px solid;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    background: var(--gray-50);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.log-success {
+    border-left-color: var(--success);
+}
+
+.log-failed {
+    border-left-color: var(--danger);
+}
+
+/* ========================================
+   分页样式
+   ======================================== */
+.pagination {
+    margin-top: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.pagination .page-link {
+    color: var(--primary);
+    border-color: var(--gray-300);
+    margin: 0;
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    transition: var(--transition);
+}
+
+.pagination .page-link:hover {
+    color: var(--primary-dark);
+    background-color: var(--gray-100);
+    border-color: var(--primary);
+    z-index: 2;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(to right, var(--primary) 0%, var(--primary-lighter) 100%);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--gray-400);
+    background-color: white;
+    border-color: var(--gray-200);
+}
+
+.pagination-info {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--gray-600);
+    font-size: 0.95em;
+    padding: 10px;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+}
+
+.pagination-info strong {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* ========================================
+   表单验证样式
+   ======================================== */
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ========================================
+   下拉菜单样式
+   ======================================== */
+.dropdown-menu {
+    min-width: 200px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 8px 0;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    transition: var(--transition);
+}
+
+.dropdown-item:hover {
+    background-color: var(--gray-100);
+    color: var(--primary);
+}
+
+/* ========================================
+   批量添加相关样式
+   ======================================== */
+.code-example {
+    background-color: var(--gray-50);
+    border-left: 4px solid var(--primary-lighter);
+    padding: 15px;
+    margin: 15px 0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    border-radius: var(--radius-md);
+}
+
+.preview-table {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+}
+
+/* ========================================
+   图片通用样式
+   ======================================== */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+/* ========================================
+   模态框滚动修复
+   ======================================== */
+.modal {
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal-dialog {
+    margin: 2rem auto;
+}
+
+.modal-xl {
+    max-width: 95%;
+}
+
+/* ========================================
+   响应式断点
+   ======================================== */
+
+/* 超小屏幕 (手机竖屏, <576px) */
+@media (max-width: 575.98px) {
+    html {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 5px;
+    }
+
+    .header {
+        padding: 1.5rem 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .mgmt-link {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 15px;
+    }
+
+    .mgmt-link .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .logo-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo-container .logo-text {
+        padding-right: 0;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+    .logo-img-large {
+        height: 60px;
+    }
+
+    .statistics .row > div {
+        margin-bottom: 15px;
+    }
+
+    .record-card {
+        margin-bottom: 15px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .btn-group-view {
+        width: 100%;
+    }
+
+    .btn-group-view .btn {
+        flex: 1;
+    }
+
+    .search-box {
+        padding: 15px;
+    }
+
+    .card-header {
+        padding: 12px 15px;
+    }
+
+    .login-body {
+        padding: 25px;
+    }
+
+    .modal-dialog {
+        margin: 1rem auto;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .pagination .page-link {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+}
+
+/* 小屏幕 (手机横屏, 576px - 767px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container {
+        max-width: 100%;
+        padding: 0 8px;
+    }
+
+    .header {
+        padding: 1.75rem 0;
+    }
+
+    .header h1 {
+        font-size: 1.75rem;
+    }
+
+    .logo-img {
+        height: 45px;
+    }
+
+    .logo-img-large {
+        height: 70px;
+    }
+
+    .statistics .row > div {
+        margin-bottom: 15px;
+    }
+}
+
+/* 中等屏幕 (平板, 768px - 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .container {
+        max-width: 100%;
+        padding: 0 8px;
+    }
+
+    .header {
+        padding: 2rem 0;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .logo-img {
+        height: 50px;
+    }
+
+    .logo-img-large {
+        height: 75px;
+    }
+
+    .statistics .row > div:nth-child(3),
+    .statistics .row > div:nth-child(4) {
+        margin-bottom: 15px;
+    }
+}
+
+/* 大屏幕 (桌面, 992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .header {
+        padding: 2.25rem 0;
+    }
+
+    .header h1 {
+        font-size: 2.25rem;
+    }
+}
+
+/* 超大屏幕 (大桌面, ≥1200px) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .header {
+        padding: 2.5rem 0;
+    }
+
+    .header h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* 超超大屏幕 (≥1400px) */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    .header,
+    .mgmt-link,
+    .btn,
+    .search-box,
+    .pagination {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    .record-card,
+    .management-card {
+        box-shadow: none;
+        border: 1px solid var(--gray-200);
+        page-break-inside: avoid;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --gray-50: #1a202c;
+        --gray-100: #2d3748;
+        --gray-200: #4a5568;
+    }
+
+    body {
+        background: var(--gray-900);
+        color: var(--gray-100);
+    }
+
+    .record-card,
+    .management-card,
+    .search-box,
+    .login-card {
+        background: var(--gray-800);
+        border-color: var(--gray-700);
+    }
+
+    .trilium-content {
+        background: var(--gray-800);
+        border-color: var(--gray-700);
+    }
+}
+
+/* 动画和过渡 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.record-card,
+.management-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* 可访问性增强 */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* 隐藏滚动条但保留功能 */
+.trilium-content::-webkit-scrollbar,
+.content-search-results::-webkit-scrollbar,
+.preview-table::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.trilium-content::-webkit-scrollbar-track,
+.content-search-results::-webkit-scrollbar-track,
+.preview-table::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 4px;
+}
+
+.trilium-content::-webkit-scrollbar-thumb,
+.content-search-results::-webkit-scrollbar-thumb,
+.preview-table::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 4px;
+}
+
+.trilium-content::-webkit-scrollbar-thumb:hover,
+.content-search-results::-webkit-scrollbar-thumb:hover,
+.preview-table::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}

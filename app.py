@@ -72,6 +72,6 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    
+
     # 生产环境应禁用debug模式
-    app.run(debug=config.DEBUG_MODE, port=5000)
+    app.run(debug=config.DEBUG_MODE, host=config.FLASK_HOST, port=config.FLASK_PORT)

@@ -4,97 +4,131 @@
 """
 import requests
 from flask import Blueprint, render_template, request, jsonify, make_response
-from database.db_utils import fetch_all_records, fetch_record_by_id, fetch_records_by_name, get_total_count
+from database.db_utils import fetch_all_records, fetch_record_by_id, fetch_records_by_name, get_total_count, fetch_records_with_pagination, fetch_records_by_name_with_pagination
 from trilium_helper import get_trilium_helper, format_content_for_display, test_connection as test_trilium_connection
 import config
 
 # 创建视图蓝图
 views_bp = Blueprint('views', __name__)
 
-# 主页 - 展示所有数据
+# 主页 - 展示所有数据（支持分页）
 @views_bp.route('/')
 def index():
     try:
-        all_records = fetch_all_records()
-        total_count = get_total_count()
-        
-        print(f"首页加载: 总记录数={total_count}, 实际查询到={len(all_records) if all_records else 0}")
-        
-        return render_template('index.html', 
-                             records=all_records, 
+        # 获取分页参数，默认第1页，每页15条
+        page = request.args.get('page', 1, type=int)
+        per_page = 15
+
+        # 分页查询记录
+        records, total_count = fetch_records_with_pagination(page, per_page)
+
+        # 计算分页信息
+        total_pages = (total_count + per_page - 1) // per_page  # 向上取整
+        showing_start = (page - 1) * per_page + 1
+        showing_end = min(page * per_page, total_count)
+
+        print(f"首页加载: 页码={page}, 总记录数={total_count}, 实际查询到={len(records)}, 总页数={total_pages}")
+
+        return render_template('index.html',
+                             records=records,
                              total_count=total_count,
-                             showing_count=len(all_records) if all_records else 0,
-                             is_search=False)
+                             showing_count=showing_end - showing_start + 1 if records else 0,
+                             page=page,
+                             per_page=per_page,
+                             total_pages=total_pages,
+                             showing_start=showing_start,
+                             showing_end=showing_end,
+                             is_search=False,
+                             trilium_base_url=config.TRILIUM_BASE_URL)
     except Exception as e:
         error_msg = f"数据库连接错误: {str(e)}"
         print(f"首页错误: {error_msg}")
-        return render_template('index.html', 
-                             records=[], 
-                             error=error_msg, 
+        return render_template('index.html',
+                             records=[],
+                             error=error_msg,
                              total_count=0,
                              showing_count=0,
+                             page=1,
+                             per_page=15,
+                             total_pages=1,
                              is_search=False)
 
 # 搜索接口 - 根据主键搜索
 @views_bp.route('/search', methods=['GET'])
 def search():
     search_id = request.args.get('id', '').strip()
-    
-    print(f"搜索请求: id={search_id}")
-    
+    page = request.args.get('page', 1, type=int)
+
+    print(f"搜索请求: id={search_id}, page={page}")
+
     if not search_id:
         print("没有提供搜索ID，重定向到首页")
-        return render_template('index.html', 
-                             records=[], 
+        return render_template('index.html',
+                             records=[],
                              error="请输入搜索ID",
                              total_count=get_total_count(),
                              showing_count=0,
+                             page=1,
+                             per_page=15,
+                             total_pages=1,
                              is_search=True,
                              search_id="")
-    
+
     try:
         record_id = int(search_id)
         print(f"搜索ID: {record_id}")
-        
+
         record = fetch_record_by_id(record_id)
         print(f"查询结果: {record}")
-        
+
         if record:
-            return render_template('index.html', 
-                                 records=[record], 
-                                 total_count=get_total_count(),
+            return render_template('index.html',
+                                 records=[record],
+                                 total_count=1,
                                  showing_count=1,
+                                 page=page,
+                                 per_page=15,
+                                 total_pages=1,
                                  search_id=search_id,
                                  is_search=True)
         else:
             error_msg = f"未找到ID为 {search_id} 的记录"
             print(f"搜索失败: {error_msg}")
-            return render_template('index.html', 
-                                 records=[], 
+            return render_template('index.html',
+                                 records=[],
                                  error=error_msg,
                                  total_count=get_total_count(),
                                  showing_count=0,
-                                 search_id=search_id,
-                                 is_search=True)
-    
+                                 page=1,
+                                 per_page=15,
+                                 total_pages=1,
+                             search_id=search_id,
+                             is_search=True)
+
     except ValueError:
         error_msg = "请输入有效的数字ID"
         print(f"搜索值错误: {error_msg}")
-        return render_template('index.html', 
-                             records=[], 
+        return render_template('index.html',
+                             records=[],
                              error=error_msg,
                              total_count=get_total_count(),
                              showing_count=0,
+                             page=1,
+                             per_page=15,
+                             total_pages=1,
                              search_id=search_id,
                              is_search=True)
     except Exception as e:
         error_msg = f"搜索过程中发生错误: {str(e)}"
         print(f"搜索异常: {error_msg}")
-        return render_template('index.html', 
-                             records=[], 
+        return render_template('index.html',
+                             records=[],
                              error=error_msg,
                              total_count=get_total_count(),
                              showing_count=0,
+                             page=1,
+                             per_page=15,
+                             total_pages=1,
                              search_id=search_id,
                              is_search=True)
 
@@ -118,17 +152,25 @@ def get_all():
 @views_bp.route('/search/name', methods=['POST'])
 def search_by_name():
     name = request.form.get('name', '').strip()
-    print(f"按名称搜索: {name}")
-    
+    page = request.form.get('page', 1, type=int)
+    per_page = request.form.get('per_page', 15, type=int)
+
+    print(f"按名称搜索: {name}, page={page}")
+
     if not name:
         return jsonify({'success': False, 'message': '请输入知识库名称'})
-    
+
     try:
-        records = fetch_records_by_name(name)
+        records, total_count = fetch_records_by_name_with_pagination(name, page, per_page)
+        total_pages = (total_count + per_page - 1) // per_page
         return jsonify({
             'success': True,
             'records': records,
-            'count': len(records)
+            'count': len(records),
+            'total_count': total_count,
+            'page': page,
+            'per_page': per_page,
+            'total_pages': total_pages
         })
     except Exception as e:
         return jsonify({
@@ -286,9 +328,9 @@ def image_proxy():
         parsed_url = urlparse(url)
         
         # 检查是否是Trilium附件URL
-        if parsed_url.netloc != '10.10.10.254:8080':
+        if parsed_url.netloc != config.TRILIUM_SERVER_HOST:
             return jsonify({
-                'success': False, 
+                'success': False,
                 'message': f'不支持的URL域名: {parsed_url.netloc}'
             }), 400
         

@@ -9,6 +9,7 @@ import bleach
 from urllib.parse import urljoin, quote_plus
 from trilium_py.client import ETAPI
 import config
+import config
 
 class TriliumHelper:
     """Trilium 帮助类，封装客户端和工具方法"""
@@ -116,30 +117,30 @@ class TriliumHelper:
     
     def extract_note_id_from_url(self, trilium_url):
         """从Trilium前端URL中提取真实的笔记ID（修正版）
-        
+
         重要：ETAPI需要的是 #root/ 后面的持久化笔记ID，而不是URL中的 ntxId 参数。
-        
+
         支持格式:
-        1. 直接根笔记: http://10.10.10.254:8080/#root/NJ2k4edE9aQz
-        2. 带ntxId参数: http://10.10.10.254:8080/#root/NJ2k4edE9aQz?ntxId=xyCGyp
-        3. 嵌套笔记: http://10.10.10.254:8080/#root/qGdjohlw9XGf/NJ2k4edE9aQz?ntxId=xyCGyp
-        4. 旧格式（兼容）: http://10.10.10.254:8080/#root/qGdjohlw9XGf/QgFQxmwJktad?ntxId=tKqABR
+        1. 直接根笔记: http://服务器地址:8080/#root/NJ2k4edE9aQz
+        2. 带ntxId参数: http://服务器地址:8080/#root/NJ2k4edE9aQz?ntxId=xyCGyp
+        3. 嵌套笔记: http://服务器地址:8080/#root/qGdjohlw9XGf/NJ2k4edE9aQz?ntxId=xyCGyp
+        4. 旧格式（兼容）: http://服务器地址:8080/#root/qGdjohlw9XGf/QgFQxmwJktad?ntxId=tKqABR
         """
         if not trilium_url:
             print("❌ 提取笔记ID: URL为空")
             return None
-        
+
         print(f"解析Trilium URL: {trilium_url}")
-        
+
         # 方法1: 优先从 #root/ 路径中提取（这是正确的持久化笔记ID）
         # 示例: #root/NJ2k4edE9aQz 或 #root/qGdjohlw9XGf/NJ2k4edE9aQz
         root_pattern = r'#root/(?:[a-zA-Z0-9]+/)*([a-zA-Z0-9]+)'
         root_match = re.search(root_pattern, trilium_url)
-        
+
         if root_match:
             note_id = root_match.group(1)
             print(f"✅ 从 #root/ 路径提取到持久化笔记ID: {note_id}")
-            
+
             # 同时检查是否有ntxId参数，用于对比
             ntxid_match = re.search(r'[?&]ntxId=([a-zA-Z0-9_-]+)', trilium_url)
             if ntxid_match:
@@ -163,7 +164,7 @@ class TriliumHelper:
         
         print("❌ 无法从URL中提取出任何有效的ID")
         print(f"   原始URL: {trilium_url}")
-        print(f"   ℹ️  正确格式应为: http://10.10.10.254:8080/#root/NoteId 或 http://10.10.10.254:8080/#root/NoteId?ntxId=xxx")
+        print(f"   ℹ️  正确格式应为: {config.TRILIUM_BASE_URL}/#root/NoteId 或 {config.TRILIUM_BASE_URL}/#root/NoteId?ntxId=xxx")
         return None
     
     def get_note_content_by_url(self, trilium_url):
