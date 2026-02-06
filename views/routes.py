@@ -38,7 +38,8 @@ def index():
                              total_pages=total_pages,
                              showing_start=showing_start,
                              showing_end=showing_end,
-                             is_search=False)
+                             is_search=False,
+                             trilium_base_url=config.TRILIUM_BASE_URL)
     except Exception as e:
         error_msg = f"数据库连接错误: {str(e)}"
         print(f"首页错误: {error_msg}")
@@ -327,9 +328,9 @@ def image_proxy():
         parsed_url = urlparse(url)
         
         # 检查是否是Trilium附件URL
-        if parsed_url.netloc != '10.10.10.254:8080':
+        if parsed_url.netloc != config.TRILIUM_SERVER_HOST:
             return jsonify({
-                'success': False, 
+                'success': False,
                 'message': f'不支持的URL域名: {parsed_url.netloc}'
             }), 400
         

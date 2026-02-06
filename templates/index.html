@@ -630,7 +630,7 @@
                                     
                                     data.results.forEach((note, index) => {
                                         // 构建Trilium笔记的URL
-                                        const triliumBaseUrl = 'http://10.10.10.254:8080';
+                                        const triliumBaseUrl = '{{ trilium_base_url|safe }}';
                                         const noteUrl = `${triliumBaseUrl}/#root/${note.noteId}`;
                                         
                                         // 格式化日期
