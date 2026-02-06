@@ -12,12 +12,35 @@
 </head>
 <body>
     <div class="container">
-        <!-- 管理入口链接 -->
-        <div class="mgmt-link">
-            <a href="/MGMT" class="btn btn-outline-light">
-                <i class="fas fa-tools me-1"></i> 管理入口
-            </a>
+        <!-- 顶部用户信息栏 -->
+        {% if current_user %}
+        <div class="user-info-bar mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="user-info">
+                    <i class="fas fa-user-circle text-white me-2"></i>
+                    <span class="fw-bold">{{ current_user.display_name or current_user.username }}</span>
+                    {% if current_user.role == 'admin' %}
+                    <span class="badge bg-light text-dark ms-2">管理员</span>
+                    {% else %}
+                    <span class="badge bg-light text-dark ms-2">用户</span>
+                    {% endif %}
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <i class="fas fa-key me-1"></i>修改密码
+                    </button>
+                    {% if current_user.role == 'admin' %}
+                    <a href="/MGMT" class="btn btn-sm btn-light">
+                        <i class="fas fa-tools me-1"></i>管理后台
+                    </a>
+                    {% endif %}
+                    <a href="/auth/logout" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-sign-out-alt me-1"></i>退出登录
+                    </a>
+                </div>
+            </div>
         </div>
+        {% endif %}
 
         <!-- 标题和Logo -->
         <div class="header">
@@ -213,35 +236,17 @@
                                 </div>
                                 <div class="card-body">
                                     <h6 class="text-muted">知识库名称</h6>
-                                    <h5 class="card-title mb-3">{{ record.KB_Name }}</h5>
-                                    
-                                    <h6 class="text-muted">链接地址</h6>
-                                    <p class="card-text">
-                                        {% if record.KB_link and record.KB_link != 'None' %}
-                                            <code style="font-size: 0.8em; word-break: break-all;">{{ record.KB_link }}</code>
-                                        {% else %}
-                                            <span class="text-muted">无链接</span>
-                                        {% endif %}
-                                    </p>
-                                    
+                                    <h5 class="card-title mb-4">{{ record.KB_Name }}</h5>
+
                                     <div class="action-buttons mt-4 btn-group-view">
                                         {% if record.KB_link and record.KB_link != 'None' %}
-                                        <a href="{{ record.KB_link }}" 
-                                           target="_blank" 
-                                           class="btn btn-success btn-sm link-btn">
-                                            <i class="fas fa-external-link-alt me-1"></i>访问链接
-                                        </a>
-                                        <button class="btn btn-info btn-sm btn-view-content" 
+                                        <button class="btn btn-info btn-sm btn-view-content w-100"
                                                 data-kb-number="{{ record.KB_Number }}"
                                                 data-kb-name="{{ record.KB_Name }}"
                                                 data-trilium-url="{{ record.KB_link }}">
                                             <i class="fas fa-eye me-1"></i>查看内容
                                         </button>
                                         {% endif %}
-                                        <button class="btn btn-outline-primary btn-sm copy-link" 
-                                                data-link="{{ record.KB_link if record.KB_link and record.KB_link != 'None' else '' }}">
-                                            <i class="fas fa-copy me-1"></i>复制链接
-                                        </button>
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted text-center">
@@ -261,7 +266,6 @@
                                 <tr>
                                     <th>编号</th>
                                     <th>知识库名称</th>
-                                    <th>链接地址</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -271,31 +275,15 @@
                                     <td><strong>KB_{{ record.KB_Number }}</strong></td>
                                     <td>{{ record.KB_Name }}</td>
                                     <td>
-                                        {% if record.KB_link and record.KB_link != 'None' %}
-                                        <code style="font-size: 0.9em;">{{ record.KB_link }}</code>
-                                        {% else %}
-                                        <span class="text-muted">无链接</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
                                         <div class="action-buttons btn-group-view">
                                             {% if record.KB_link and record.KB_link != 'None' %}
-                                            <a href="{{ record.KB_link }}" 
-                                               target="_blank" 
-                                               class="btn btn-success btn-sm link-btn">
-                                                <i class="fas fa-external-link-alt"></i>
-                                            </a>
-                                            <button class="btn btn-info btn-sm btn-view-content" 
+                                            <button class="btn btn-info btn-sm btn-view-content"
                                                     data-kb-number="{{ record.KB_Number }}"
                                                     data-kb-name="{{ record.KB_Name }}"
                                                     data-trilium-url="{{ record.KB_link }}">
-                                                <i class="fas fa-eye"></i>
+                                                <i class="fas fa-eye"></i> 查看内容
                                             </button>
                                             {% endif %}
-                                            <button class="btn btn-outline-primary btn-sm copy-link" 
-                                                    data-link="{{ record.KB_link if record.KB_link and record.KB_link != 'None' else '' }}">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -416,8 +404,63 @@
                     <button type="button" class="btn btn-outline-primary" id="refreshContent">
                         <i class="fas fa-sync-alt me-1"></i>刷新
                     </button>
-                    <button type="button" class="btn btn-primary" id="openInTrilium" style="display: none;">
-                        <i class="fas fa-external-link-alt me-1"></i>在Trilium中打开
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改密码模态框 -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-key me-2"></i>修改密码
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label class="form-label">旧密码</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="oldPassword" required
+                                       placeholder="请输入当前密码">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">新密码</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <input type="password" class="form-control" id="newPassword" required
+                                       placeholder="请输入新密码（至少6位）" minlength="6">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">确认新密码</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <input type="password" class="form-control" id="confirmPassword" required
+                                       placeholder="请再次输入新密码" minlength="6">
+                            </div>
+                        </div>
+                        <div class="alert alert-warning small mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            密码长度至少为6位，建议包含字母和数字
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitChangePassword">
+                        <i class="fas fa-save me-1"></i>保存修改
                     </button>
                 </div>
             </div>
@@ -492,29 +535,6 @@
                         document.getElementById('tableView').style.display = 'block';
                     }
                 });
-            });
-
-            // 复制链接功能
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('copy-link') || 
-                    e.target.closest('.copy-link')) {
-                    const button = e.target.classList.contains('copy-link') ? 
-                        e.target : e.target.closest('.copy-link');
-                    const link = button.getAttribute('data-link');
-                    
-                    if (link) {
-                        navigator.clipboard.writeText(link)
-                            .then(() => {
-                                showToast('链接已复制到剪贴板');
-                            })
-                            .catch(err => {
-                                console.error('复制失败:', err);
-                                showToast('复制失败，请手动复制', 'error');
-                            });
-                    } else {
-                        showToast('无链接可复制', 'error');
-                    }
-                }
             });
 
             // 按名称搜索
@@ -810,27 +830,26 @@
                 document.getElementById('contentLoading').style.display = 'block';
                 document.getElementById('contentError').style.display = 'none';
                 document.getElementById('contentDisplay').style.display = 'none';
-                document.getElementById('openInTrilium').style.display = 'none';
-                
+
                 // 更新标题和信息
                 if (kbNumber) {
-                    document.getElementById('contentModalTitle').innerHTML = 
+                    document.getElementById('contentModalTitle').innerHTML =
                         `<i class="fas fa-book me-2"></i>${kbName} (KB_${kbNumber})`;
                 } else {
-                    document.getElementById('contentModalTitle').innerHTML = 
+                    document.getElementById('contentModalTitle').innerHTML =
                         `<i class="fas fa-book me-2"></i>${kbName || 'Trilium笔记'}`;
                 }
-                
-                document.getElementById('contentInfo').innerHTML = 
+
+                document.getElementById('contentInfo').innerHTML =
                     `<i class="fas fa-info-circle me-2"></i>正在加载内容...`;
-                
+
                 // 存储当前内容信息
                 currentContentData = {
                     kbNumber: kbNumber,
                     kbName: kbName,
                     triliumUrl: triliumUrl
                 };
-                
+
                 // 显示模态框
                 const modal = new bootstrap.Modal(document.getElementById('contentModal'));
                 modal.show();
@@ -878,12 +897,9 @@
                                 const modifiedDate = new Date(data.modified).toLocaleString();
                                 infoHtml += ` | 最后更新: ${modifiedDate}`;
                             }
-                            
+
                             document.getElementById('contentInfo').innerHTML = infoHtml;
-                            
-                            // 显示在Trilium中打开的按钮
-                            document.getElementById('openInTrilium').style.display = 'inline-block';
-                            
+
                         } else {
                             // 显示错误
                             document.getElementById('errorMessage').textContent = data.message || '加载内容失败';
@@ -911,14 +927,58 @@
                 }
             });
             
-            // 在Trilium中打开按钮
-            document.getElementById('openInTrilium').addEventListener('click', function() {
-                if (currentContentData.triliumUrl) {
-                    window.open(currentContentData.triliumUrl, '_blank');
+            // 修改密码功能
+            document.getElementById('submitChangePassword').addEventListener('click', function() {
+                const oldPassword = document.getElementById('oldPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // 验证密码
+                if (newPassword.length < 6) {
+                    alert('新密码长度至少为6位');
+                    return;
                 }
+
+                if (newPassword !== confirmPassword) {
+                    alert('两次输入的新密码不一致');
+                    return;
+                }
+
+                if (oldPassword === newPassword) {
+                    alert('新密码不能与旧密码相同');
+                    return;
+                }
+
+                // 发送修改密码请求
+                fetch('/auth/api/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        old_password: oldPassword,
+                        new_password: newPassword
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('密码修改成功！');
+                        // 清空表单
+                        document.getElementById('changePasswordForm').reset();
+                        // 关闭模态框
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+                        modal.hide();
+                    } else {
+                        alert('密码修改失败: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('修改密码失败:', error);
+                    alert('密码修改失败，请稍后重试');
+                });
             });
-            
-            
+
             // 页面加载时测试Trilium连接
             if (window.location.pathname === '/') {
                 // 延迟测试连接，避免影响页面加载

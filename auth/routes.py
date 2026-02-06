@@ -15,20 +15,20 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """登录页面"""
-    # 如果已经登录，重定向到管理页面
+    # 如果已经登录，重定向到首页
     if get_current_user():
-        return redirect(url_for('management.management'))
-    
+        return redirect(url_for('views.index'))
+
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()
-        
+
         if not username or not password:
-            return render_template('login.html', 
+            return render_template('login.html',
                                  error="请输入用户名和密码")
-        
+
         success, result = authenticate_user(username, password)
-        
+
         if success:
             # 保存用户信息到session
             user_info = result
@@ -37,17 +37,22 @@ def login():
             session['display_name'] = user_info['display_name']
             session['role'] = user_info['role']
             session['login_time'] = datetime.now().isoformat()
-            
+
             # 设置session永不过期（浏览器关闭后失效）
             session.permanent = False
-            
-            next_page = request.args.get('next', url_for('management.management'))
-            return redirect(next_page)
+
+            # 获取next参数，如果存在则跳转到指定页面
+            next_url = request.form.get('next')
+            if next_url:
+                return redirect(next_url)
+
+            # 重定向到首页
+            return redirect(url_for('views.index'))
         else:
-            return render_template('login.html', 
+            return render_template('login.html',
                                  error=result,
                                  username=username)
-    
+
     return render_template('login.html')
 
 # 退出登录

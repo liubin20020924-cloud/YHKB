@@ -373,6 +373,14 @@ body {
 /* ========================================
    链接和位置样式
    ======================================== */
+.user-info-bar {
+    background: linear-gradient(135deg, #0f4c81 0%, #1a5c9e 100%);
+    padding: 15px 25px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 20px;
+}
+
 .mgmt-link {
     position: absolute;
     top: 20px;
@@ -381,16 +389,57 @@ body {
 }
 
 .user-info {
-    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.user-info .user-name {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.user-info .user-badge {
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.user-info-bar .btn {
+    padding: 6px 16px;
     font-size: 0.9rem;
+    font-weight: 500;
     transition: var(--transition);
 }
 
-.user-info:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+.user-info-bar .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: white;
+}
+
+.user-info-bar .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.user-info-bar .btn-light {
+    background: white;
+    color: var(--primary);
+    border: none;
+}
+
+.user-info-bar .btn-light:hover {
+    background: #f8f9fa;
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* ========================================

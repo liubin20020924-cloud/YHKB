@@ -3,17 +3,25 @@
 包含首页浏览、搜索功能和Trilium内容集成
 """
 import requests
-from flask import Blueprint, render_template, request, jsonify, make_response
+from flask import Blueprint, render_template, request, jsonify, make_response, redirect, url_for, session
 from database.db_utils import fetch_all_records, fetch_record_by_id, fetch_records_by_name, get_total_count, fetch_records_with_pagination, fetch_records_by_name_with_pagination
 from trilium_helper import get_trilium_helper, format_content_for_display, test_connection as test_trilium_connection
+from auth.utils import get_current_user
 import config
 
 # 创建视图蓝图
 views_bp = Blueprint('views', __name__)
 
-# 主页 - 展示所有数据（支持分页）
+# 主页 - 展示所有数据（支持分页，需要登录）
 @views_bp.route('/')
 def index():
+    """首页 - 需要登录才能访问"""
+    # 检查登录状态
+    user = get_current_user()
+    if not user:
+        from flask import session as flask_session
+        flask_session.clear()
+        return redirect(url_for('auth.login', next=request.url))
     try:
         # 获取分页参数，默认第1页，每页15条
         page = request.args.get('page', 1, type=int)
@@ -39,7 +47,8 @@ def index():
                              showing_start=showing_start,
                              showing_end=showing_end,
                              is_search=False,
-                             trilium_base_url=config.TRILIUM_BASE_URL)
+                             trilium_base_url=config.TRILIUM_BASE_URL,
+                             current_user=user)
     except Exception as e:
         error_msg = f"数据库连接错误: {str(e)}"
         print(f"首页错误: {error_msg}")
@@ -51,7 +60,8 @@ def index():
                              page=1,
                              per_page=15,
                              total_pages=1,
-                             is_search=False)
+                             is_search=False,
+                             current_user=user)
 
 # 搜索接口 - 根据主键搜索
 @views_bp.route('/search', methods=['GET'])

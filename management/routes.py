@@ -17,9 +17,9 @@ DEBUG_MODE = False
 
 # 管理页面 - 显示所有记录并提供管理功能
 @management_bp.route('/')
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def management():
-    """管理页面 - 显示所有记录并提供管理功能"""
+    """管理页面 - 显示所有记录并提供管理功能（仅管理员）"""
     global DEBUG_MODE
     try:
         all_records = fetch_all_records()
@@ -154,7 +154,7 @@ def toggle_debug():
 
 # 系统状态检查API
 @management_bp.route('/api/system-status')
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def system_status():
     """获取系统状态信息"""
     try:
@@ -246,7 +246,7 @@ def cleanup():
 
 # 添加新记录接口
 @management_bp.route('/api/add', methods=['POST'])
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def add_record():
     """添加新记录"""
     try:
@@ -298,7 +298,7 @@ def add_record():
 
 # 更新记录接口
 @management_bp.route('/api/update/<int:record_id>', methods=['PUT'])
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def update_record(record_id):
     """更新记录"""
     try:
@@ -342,7 +342,7 @@ def update_record(record_id):
 
 # 删除记录接口
 @management_bp.route('/api/delete/<int:record_id>', methods=['DELETE'])
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def delete_record(record_id):
     """删除记录"""
     try:
@@ -380,7 +380,7 @@ def delete_record(record_id):
 
 # 批量删除接口
 @management_bp.route('/api/batch-delete', methods=['POST'])
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def batch_delete():
     """批量删除记录"""
     try:
@@ -422,7 +422,7 @@ def batch_delete():
 
 # 批量添加记录接口
 @management_bp.route('/api/batch-add', methods=['POST'])
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def batch_add_records():
     """批量添加记录"""
     try:
@@ -501,7 +501,7 @@ def batch_add_records():
 
 # 导出数据接口
 @management_bp.route('/api/export')
-@login_required(roles=['admin', 'user'])
+@login_required(roles=['admin'])
 def export_data():
     """导出数据为JSON格式"""
     try:
