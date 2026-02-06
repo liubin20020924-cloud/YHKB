@@ -78,8 +78,8 @@ body {
 }
 
 .container {
-    max-width: 1400px;
-    padding: 0 15px;
+    max-width: 1600px;
+    padding: 0 10px;
     margin: 0 auto;
 }
 
@@ -941,7 +941,7 @@ table {
     }
 
     .container {
-        padding: 0 10px;
+        padding: 0 5px;
     }
 
     .header {
@@ -1041,7 +1041,8 @@ table {
 /* 小屏幕 (手机横屏, 576px - 767px) */
 @media (min-width: 576px) and (max-width: 767.98px) {
     .container {
-        max-width: 540px;
+        max-width: 100%;
+        padding: 0 8px;
     }
 
     .header {
@@ -1068,7 +1069,8 @@ table {
 /* 中等屏幕 (平板, 768px - 991px) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     .container {
-        max-width: 720px;
+        max-width: 100%;
+        padding: 0 8px;
     }
 
     .header {
@@ -1096,7 +1098,8 @@ table {
 /* 大屏幕 (桌面, 992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .container {
-        max-width: 960px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1111,7 +1114,8 @@ table {
 /* 超大屏幕 (大桌面, ≥1200px) */
 @media (min-width: 1200px) {
     .container {
-        max-width: 1140px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1126,7 +1130,8 @@ table {
 /* 超超大屏幕 (≥1400px) */
 @media (min-width: 1400px) {
     .container {
-        max-width: 1320px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 }
 
