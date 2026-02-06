@@ -9,6 +9,333 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/edge_fixes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-card.bg-primary {
+            background: linear-gradient(135deg, #e7f1ff 0%, #f0f6ff 100%);
+            border-left-color: #0d6efd;
+        }
+
+        .stats-card.bg-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f2 100%);
+            border-left-color: #198754;
+        }
+
+        .stats-card.bg-warning {
+            background: linear-gradient(135deg, #fff8e1 0%, #fffbe6 100%);
+            border-left-color: #fd7e14;
+        }
+
+        .stats-card.bg-danger {
+            background: linear-gradient(135deg, #ffebee 0%, #fef0f0 100%);
+            border-left-color: #dc3545;
+        }
+
+        .stats-card h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .stats-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stats-card.bg-primary h3 {
+            color: #0d6efd;
+        }
+
+        .stats-card.bg-success h3 {
+            color: #198754;
+        }
+
+        .stats-card.bg-warning h3 {
+            color: #fd7e14;
+        }
+
+        .stats-card.bg-danger h3 {
+            color: #dc3545;
+        }
+
+        .management-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .management-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        .table thead th {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 15px;
+            white-space: nowrap;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .role-admin {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .role-user {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .status-active {
+            background-color: #198754;
+            color: white;
+        }
+
+        .status-inactive {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .status-locked {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .login-logs {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .login-logs::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .login-logs::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .login-logs::-webkit-scrollbar-thumb {
+            background: #0d6efd;
+            border-radius: 3px;
+        }
+
+        .log-card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .log-card:hover {
+            transform: translateX(3px);
+        }
+
+        .log-card.log-success {
+            border-left: 3px solid #198754;
+        }
+
+        .log-card.log-failed {
+            border-left: 3px solid #dc3545;
+        }
+
+        .log-card .card-body {
+            padding: 12px;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 15px 20px;
+        }
+
+        .modal-header.bg-danger {
+            background-color: #dc3545;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 15px 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #ced4da;
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .form-text {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            padding: 8px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            padding: 8px 20px;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+            border-color: #b02a37;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            padding: 8px 20px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5c636a;
+            border-color: #565e64;
+        }
+
+        .btn-outline-primary {
+            border-color: #0d6efd;
+            color: #0d6efd;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-outline-secondary {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .toast-container {
+            z-index: 9999;
+        }
+
+        .toast {
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -25,28 +352,29 @@
                             </div>
                         </div>
                     </div>
-                <div class="col-md-4 text-end">
-                    <div class="d-flex align-items-center justify-content-end gap-3">
-                        <!-- 用户信息 -->
-                        {% if current_user %}
-                        <div class="user-info">
-                            <i class="fas fa-user-circle text-white me-2"></i>
-                            <span class="fw-bold">{{ current_user.display_name or current_user.username }}</span>
-                            <span class="badge bg-light text-dark ms-2">{{ current_user.role }}</span>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- 操作按钮 -->
-                        <div class="btn-group">
-                            <a href="/MGMT" class="btn btn-light">
-                                <i class="fas fa-arrow-left me-1"></i>返回数据管理
-                            </a>
-                            <a href="/" class="btn btn-outline-light">
-                                <i class="fas fa-home me-1"></i>返回首页
-                            </a>
-                            <a href="/auth/logout" class="btn btn-outline-light">
-                                <i class="fas fa-sign-out-alt me-1"></i>退出
-                            </a>
+                    <div class="col-md-4 text-end">
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <!-- 用户信息 -->
+                            {% if current_user %}
+                            <div class="user-info">
+                                <i class="fas fa-user-circle text-white me-2"></i>
+                                <span class="fw-bold">{{ current_user.display_name or current_user.username }}</span>
+                                <span class="badge bg-light text-dark ms-2">{{ current_user.role }}</span>
+                            </div>
+                            {% endif %}
+
+                            <!-- 操作按钮 -->
+                            <div class="btn-group">
+                                <a href="/MGMT" class="btn btn-light">
+                                    <i class="fas fa-arrow-left me-1"></i>返回数据管理
+                                </a>
+                                <a href="/" class="btn btn-outline-light">
+                                    <i class="fas fa-home me-1"></i>返回首页
+                                </a>
+                                <a href="/auth/logout" class="btn btn-outline-light">
+                                    <i class="fas fa-sign-out-alt me-1"></i>退出
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,16 +430,16 @@
             <!-- 用户列表 -->
             <div class="col-md-8">
                 <div class="management-card">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4><i class="fas fa-user-friends me-2"></i>用户列表</h4>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnAddUser">
                             <i class="fas fa-user-plus me-1"></i>添加用户
                         </button>
                     </div>
-                    
+
                     <div class="table-container">
                         <table class="table table-hover">
-                            <thead class="table-dark">
+                            <thead>
                                 <tr>
                                     <th width="60">ID</th>
                                     <th>用户名</th>
@@ -200,13 +528,13 @@
             <!-- 登录日志 -->
             <div class="col-md-4">
                 <div class="management-card">
-                    <h4 class="mb-4"><i class="fas fa-history me-2"></i>最近登录记录</h4>
-                    
-                    <div class="login-logs" style="max-height: 500px; overflow-y: auto;">
+                    <h4 class="mb-3"><i class="fas fa-history me-2"></i>最近登录记录</h4>
+
+                    <div class="login-logs">
                         {% if login_logs %}
                             {% for log in login_logs %}
                             <div class="card log-card log-{{ 'success' if log.status == 'success' else 'failed' }} mb-2">
-                                <div class="card-body py-2">
+                                <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <strong>{{ log.display_name or log.username }}</strong>
@@ -251,19 +579,19 @@
                     <form id="addUserForm">
                         <div class="mb-3">
                             <label for="newUsername" class="form-label">用户名 *</label>
-                            <input type="text" class="form-control" id="newUsername" 
+                            <input type="text" class="form-control" id="newUsername"
                                    name="username" required placeholder="请输入用户名">
-                            <div class="form-text">用户名必须唯一，不能与现有用户重复</div>
+                            <div class="form-text">用户名必须唯一,不能与现有用户重复</div>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">密码 *</label>
-                            <input type="password" class="form-control" id="newPassword" 
+                            <input type="password" class="form-control" id="newPassword"
                                    name="password" required placeholder="请输入密码">
                         </div>
                         <div class="mb-3">
                             <label for="newDisplayName" class="form-label">显示名称</label>
-                            <input type="text" class="form-control" id="newDisplayName" 
-                                   name="display_name" placeholder="请输入显示名称（可选）">
+                            <input type="text" class="form-control" id="newDisplayName"
+                                   name="display_name" placeholder="请输入显示名称(可选)">
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -309,7 +637,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editDisplayName" class="form-label">显示名称</label>
-                            <input type="text" class="form-control" id="editDisplayName" 
+                            <input type="text" class="form-control" id="editDisplayName"
                                    name="display_name" placeholder="请输入显示名称">
                         </div>
                         <div class="row mb-3">
@@ -339,8 +667,8 @@
                         </div>
                         <div class="mb-3" id="passwordChangeSection" style="display: none;">
                             <label for="editPassword" class="form-label">新密码</label>
-                            <input type="password" class="form-control" id="editPassword" 
-                                   name="password" placeholder="请输入新密码（留空则不修改）">
+                            <input type="password" class="form-control" id="editPassword"
+                                   name="password" placeholder="请输入新密码(留空则不修改)">
                         </div>
                     </form>
                 </div>
@@ -361,7 +689,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="deleteUserMessage">确定要删除这个用户吗？此操作不可撤销。</p>
+                    <p id="deleteUserMessage">确定要删除这个用户吗?此操作不可撤销。</p>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-circle me-2"></i>
                         删除用户将同时删除该用户的登录记录。
@@ -391,11 +719,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // 使用Bootstrap原生Modal实例
-            const addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
-            const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
-            const deleteUserModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
-
             // 检查登录状态
             function checkLoginStatus() {
                 $.ajax({
@@ -405,7 +728,6 @@
                         if (!response.success) {
                             window.location.href = '/auth/login?next=' + encodeURIComponent(window.location.pathname);
                         } else if (response.user.role !== 'admin') {
-                            // 如果不是管理员，重定向到管理页面
                             window.location.href = '/MGMT';
                         }
                     },
@@ -415,7 +737,7 @@
                 });
             }
 
-            // 检查当前用户是否是管理员
+            // 检查登录状态
             checkLoginStatus();
 
             // 显示消息
@@ -450,6 +772,13 @@
                 toast.show();
             }
 
+            // 打开添加用户模态框
+            $('#btnAddUser').on('click', function() {
+                $('#addUserForm')[0].reset();
+                const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                modal.show();
+            });
+
             // 添加用户
             $('#submitAddUser').on('click', function() {
                 const formData = {
@@ -473,9 +802,8 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            addUserModal.hide();
-                            $('#addUserForm')[0].reset();
-                            // 刷新页面
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                            if (modal) modal.hide();
                             setTimeout(() => location.reload(), 1500);
                         } else {
                             showMessage(response.message, 'error');
@@ -485,7 +813,7 @@
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             showMessage('添加失败: ' + xhr.responseJSON.message, 'error');
                         } else {
-                            showMessage('网络错误，请稍后重试', 'error');
+                            showMessage('网络错误,请稍后重试', 'error');
                         }
                     }
                 });
@@ -501,20 +829,20 @@
                 $('#editRole').val($(this).data('role'));
                 $('#editStatus').val($(this).data('status'));
 
-                // 重置密码修改部分
                 $('#changePassword').prop('checked', false);
                 $('#passwordChangeSection').hide();
                 $('#editPassword').val('');
 
-                editUserModal.show();
+                const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                modal.show();
             });
 
             // 切换密码修改选项
             $('#changePassword').on('change', function() {
                 if ($(this).prop('checked')) {
-                    $('#passwordChangeSection').show();
+                    $('#passwordChangeSection').slideDown();
                 } else {
-                    $('#passwordChangeSection').hide();
+                    $('#passwordChangeSection').slideUp();
                     $('#editPassword').val('');
                 }
             });
@@ -527,7 +855,6 @@
                     status: $('#editStatus').val()
                 };
 
-                // 如果勾选了修改密码，添加密码字段
                 if ($('#changePassword').prop('checked')) {
                     const newPassword = $('#editPassword').val();
                     if (newPassword) {
@@ -543,8 +870,8 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            editUserModal.hide();
-                            // 刷新页面
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+                            if (modal) modal.hide();
                             setTimeout(() => location.reload(), 1500);
                         } else {
                             showMessage(response.message, 'error');
@@ -554,7 +881,7 @@
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             showMessage('更新失败: ' + xhr.responseJSON.message, 'error');
                         } else {
-                            showMessage('网络错误，请稍后重试', 'error');
+                            showMessage('网络错误,请稍后重试', 'error');
                         }
                     }
                 });
@@ -567,8 +894,9 @@
                 currentDeleteUserId = $(this).data('user-id');
                 currentDeleteUsername = $(this).data('username');
 
-                $('#deleteUserMessage').text(`确定要删除用户 "${currentDeleteUsername}" 吗？此操作不可撤销。`);
-                deleteUserModal.show();
+                $('#deleteUserMessage').text(`确定要删除用户 "${currentDeleteUsername}" 吗?此操作不可撤销。`);
+                const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+                modal.show();
             });
 
             // 确认删除用户
@@ -579,8 +907,8 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            deleteUserModal.hide();
-                            // 刷新页面
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+                            if (modal) modal.hide();
                             setTimeout(() => location.reload(), 1500);
                         } else {
                             showMessage(response.message, 'error');
@@ -590,22 +918,10 @@
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             showMessage('删除失败: ' + xhr.responseJSON.message, 'error');
                         } else {
-                            showMessage('网络错误，请稍后重试', 'error');
+                            showMessage('网络错误,请稍后重试', 'error');
                         }
                     }
                 });
-            });
-
-            // 添加用户模态框显示时重置表单
-            document.getElementById('addUserModal').addEventListener('show.bs.modal', function() {
-                $('#addUserForm')[0].reset();
-            });
-
-            // 编辑用户模态框隐藏时重置
-            document.getElementById('editUserModal').addEventListener('hidden.bs.modal', function() {
-                $('#changePassword').prop('checked', false);
-                $('#passwordChangeSection').hide();
-                $('#editPassword').val('');
             });
         });
     </script>
