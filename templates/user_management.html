@@ -391,6 +391,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            // 使用Bootstrap原生Modal实例
+            const addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+            const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            const deleteUserModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+
             // 检查登录状态
             function checkLoginStatus() {
                 $.ajax({
@@ -418,10 +423,10 @@
                 const toastEl = $('#messageToast');
                 const toastMessage = $('#toastMessage');
                 const header = toastEl.find('.toast-header');
-                
+
                 let icon = 'fa-info-circle';
                 let bgColor = 'bg-info';
-                
+
                 switch(type) {
                     case 'success':
                         icon = 'fa-check-circle';
@@ -436,11 +441,11 @@
                         bgColor = 'bg-warning';
                         break;
                 }
-                
+
                 header.find('i').removeClass().addClass(`fas ${icon} me-2`);
                 header.removeClass().addClass(`toast-header text-white ${bgColor}`);
                 toastMessage.text(message);
-                
+
                 const toast = new bootstrap.Toast(toastEl[0]);
                 toast.show();
             }
@@ -468,7 +473,7 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            $('#addUserModal').modal('hide');
+                            addUserModal.hide();
                             $('#addUserForm')[0].reset();
                             // 刷新页面
                             setTimeout(() => location.reload(), 1500);
@@ -495,13 +500,13 @@
                 $('#editDisplayName').val($(this).data('display-name'));
                 $('#editRole').val($(this).data('role'));
                 $('#editStatus').val($(this).data('status'));
-                
+
                 // 重置密码修改部分
                 $('#changePassword').prop('checked', false);
                 $('#passwordChangeSection').hide();
                 $('#editPassword').val('');
-                
-                $('#editUserModal').modal('show');
+
+                editUserModal.show();
             });
 
             // 切换密码修改选项
@@ -538,7 +543,7 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            $('#editUserModal').modal('hide');
+                            editUserModal.hide();
                             // 刷新页面
                             setTimeout(() => location.reload(), 1500);
                         } else {
@@ -561,9 +566,9 @@
             $(document).on('click', '.btn-delete-user', function() {
                 currentDeleteUserId = $(this).data('user-id');
                 currentDeleteUsername = $(this).data('username');
-                
+
                 $('#deleteUserMessage').text(`确定要删除用户 "${currentDeleteUsername}" 吗？此操作不可撤销。`);
-                $('#deleteUserModal').modal('show');
+                deleteUserModal.show();
             });
 
             // 确认删除用户
@@ -574,7 +579,7 @@
                     success: function(response) {
                         if (response.success) {
                             showMessage(response.message, 'success');
-                            $('#deleteUserModal').modal('hide');
+                            deleteUserModal.hide();
                             // 刷新页面
                             setTimeout(() => location.reload(), 1500);
                         } else {
@@ -592,12 +597,12 @@
             });
 
             // 添加用户模态框显示时重置表单
-            $('#addUserModal').on('show.bs.modal', function() {
+            document.getElementById('addUserModal').addEventListener('show.bs.modal', function() {
                 $('#addUserForm')[0].reset();
             });
 
             // 编辑用户模态框隐藏时重置
-            $('#editUserModal').on('hidden.bs.modal', function() {
+            document.getElementById('editUserModal').addEventListener('hidden.bs.modal', function() {
                 $('#changePassword').prop('checked', false);
                 $('#passwordChangeSection').hide();
                 $('#editPassword').val('');
