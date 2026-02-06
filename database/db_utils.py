@@ -84,7 +84,7 @@ def fetch_all_records():
     connection = get_db_connection()
     if connection is None:
         return []
-    
+
     try:
         with connection.cursor() as cursor:
             # 注意表名有连字符，需要用反引号包裹
@@ -95,6 +95,35 @@ def fetch_all_records():
     except Exception as e:
         print(f"查询失败: {e}")
         return []
+    finally:
+        if connection:
+            connection.close()
+
+def fetch_records_with_pagination(page=1, per_page=15):
+    """分页获取记录"""
+    connection = get_db_connection()
+    if connection is None:
+        return [], 0
+
+    try:
+        with connection.cursor() as cursor:
+            # 获取总数
+            count_sql = "SELECT COUNT(*) as count FROM `KB-info`"
+            cursor.execute(count_sql)
+            total_count = cursor.fetchone()['count']
+
+            # 计算偏移量
+            offset = (page - 1) * per_page
+
+            # 获取当前页数据
+            data_sql = "SELECT * FROM `KB-info` ORDER BY KB_Number LIMIT %s OFFSET %s"
+            cursor.execute(data_sql, (per_page, offset))
+            results = cursor.fetchall()
+
+            return results, total_count
+    except Exception as e:
+        print(f"分页查询失败: {e}")
+        return [], 0
     finally:
         if connection:
             connection.close()
@@ -124,7 +153,7 @@ def fetch_records_by_name(name):
     connection = get_db_connection()
     if connection is None:
         return []
-    
+
     try:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM `KB-info` WHERE KB_Name LIKE %s ORDER BY KB_Number"
@@ -134,6 +163,35 @@ def fetch_records_by_name(name):
     except Exception as e:
         print(f"按名称搜索失败: {e}")
         return []
+    finally:
+        if connection:
+            connection.close()
+
+def fetch_records_by_name_with_pagination(name, page=1, per_page=15):
+    """根据名称模糊搜索（支持分页）"""
+    connection = get_db_connection()
+    if connection is None:
+        return [], 0
+
+    try:
+        with connection.cursor() as cursor:
+            # 获取总数
+            count_sql = "SELECT COUNT(*) as count FROM `KB-info` WHERE KB_Name LIKE %s"
+            cursor.execute(count_sql, (f'%{name}%',))
+            total_count = cursor.fetchone()['count']
+
+            # 计算偏移量
+            offset = (page - 1) * per_page
+
+            # 获取当前页数据
+            data_sql = "SELECT * FROM `KB-info` WHERE KB_Name LIKE %s ORDER BY KB_Number LIMIT %s OFFSET %s"
+            cursor.execute(data_sql, (f'%{name}%', per_page, offset))
+            results = cursor.fetchall()
+
+            return results, total_count
+    except Exception as e:
+        print(f"按名称分页搜索失败: {e}")
+        return [], 0
     finally:
         if connection:
             connection.close()

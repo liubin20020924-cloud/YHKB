@@ -5,6 +5,11 @@ DB_USER = 'root'  # 数据库用户名
 DB_PASSWORD = 'Nutanix/4u123!'  # 数据库密码
 DB_NAME = 'YHKB'  # 数据库名
 
+# Flask服务器配置
+FLASK_HOST = '0.0.0.0'  # Flask监听地址，0.0.0.0表示监听所有网卡
+FLASK_PORT = 5000  # Flask服务端口
+FLASK_DEBUG = False  # Flask调试模式
+
 # 登录配置
 SECRET_KEY = 'YHKB-MGMT-SECRET-KEY-2024-CHANGE-ME'  # 用于session加密，请在生产环境修改
 SESSION_TIMEOUT = 60 * 3  # Session超时时间（秒），1小时
@@ -45,6 +50,7 @@ ALLOWED_HTML_ATTRIBUTES = {
 # 图片处理配置
 TRILIUM_BASE_URL = 'http://10.10.10.254:8080'  # Trilium 基础URL
 ENABLE_IMAGE_PROXY = True  # 是否启用图片代理
+TRILIUM_SERVER_HOST = '10.10.10.254:8080'  # Trilium服务器主机地址（用于URL验证）
 
 # 在config.py末尾添加
 
