@@ -78,8 +78,8 @@ body {
 }
 
 .container {
-    max-width: 1400px;
-    padding: 0 15px;
+    max-width: 1600px;
+    padding: 0 10px;
     margin: 0 auto;
 }
 
@@ -304,12 +304,12 @@ body {
 
 .stats-card {
     border-radius: var(--radius-lg);
-    color: white;
     padding: 20px;
     margin-bottom: 15px;
     text-align: center;
     box-shadow: var(--shadow-md);
     transition: var(--transition);
+    border-left: 5px solid;
 }
 
 .stats-card:hover {
@@ -328,12 +328,12 @@ body {
     margin-bottom: 10px;
 }
 
-.bg-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-lighter) 100%); }
-.bg-success { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
-.bg-warning { background: linear-gradient(135deg, var(--warning) 0%, #f6ad55 100%); }
-.bg-danger { background: linear-gradient(135deg, var(--danger) 0%, #fc8181 100%); }
-.bg-info { background: linear-gradient(135deg, var(--info) 0%, #63b3ed 100%); }
-.bg-secondary { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
+.bg-primary { background: linear-gradient(135deg, #e7f1ff 0%, #f0f6ff 100%); border-left-color: #0d6efd; color: #0d6efd; }
+.bg-success { background: linear-gradient(135deg, #d1fae5 0%, #e6fffa 100%); border-left-color: #48bb78; color: #48bb78; }
+.bg-warning { background: linear-gradient(135deg, #fef3c7 0%, #ffedd5 100%); border-left-color: #ed8936; color: #ed8936; }
+.bg-danger { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left-color: #f56565; color: #f56565; }
+.bg-info { background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); border-left-color: #4299e1; color: #4299e1; }
+.bg-secondary { background: linear-gradient(135deg, #e2e8f0 0%, #edf2f7 100%); border-left-color: #718096; color: #718096; }
 
 /* ========================================
    搜索选项卡样式
@@ -990,6 +990,7 @@ table {
     }
 
     .container {
+        max-width: 100%;
         padding: 0 10px;
     }
 
@@ -1090,7 +1091,8 @@ table {
 /* 小屏幕 (手机横屏, 576px - 767px) */
 @media (min-width: 576px) and (max-width: 767.98px) {
     .container {
-        max-width: 540px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1117,7 +1119,8 @@ table {
 /* 中等屏幕 (平板, 768px - 991px) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     .container {
-        max-width: 720px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1145,7 +1148,8 @@ table {
 /* 大屏幕 (桌面, 992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .container {
-        max-width: 960px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1160,7 +1164,8 @@ table {
 /* 超大屏幕 (大桌面, ≥1200px) */
 @media (min-width: 1200px) {
     .container {
-        max-width: 1140px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .header {
@@ -1175,7 +1180,8 @@ table {
 /* 超超大屏幕 (≥1400px) */
 @media (min-width: 1400px) {
     .container {
-        max-width: 1320px;
+        max-width: 100%;
+        padding: 0 10px;
     }
 }
 
